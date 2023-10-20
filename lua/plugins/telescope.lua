@@ -1,3 +1,7 @@
+
+windowsCmd = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+linuxCmd = 'make'
+
 return {
   'nvim-telescope/telescope.nvim',
   -- version = '0.1.3',
@@ -5,7 +9,7 @@ return {
     { 'nvim-lua/plenary.nvim' },
     {
       'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make'
+      build = windowsCmd 
     }
   },
   config = function()

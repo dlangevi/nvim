@@ -18,5 +18,3 @@ vim.opt.termguicolors = true
 
 require('lazy').setup('plugins')
 require('autorun')
-
-
