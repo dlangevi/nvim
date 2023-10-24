@@ -1,6 +1,6 @@
 return {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    -- eependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       local horizon = require('lualine.themes.horizon')
 

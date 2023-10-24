@@ -1,13 +1,19 @@
+
 return
 -- filebrowsing
 {
     'nvim-tree/nvim-tree.lua',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    ft = 'alpha',
+    -- dependencies = { 'nvim-tree/nvim-web-devicons' },
     version = 'nightly', -- optional, updated every week. (see issue #1193)
     config = function()
       local nvimtree = require('nvim-tree')
       local api = require('nvim-tree.api')
+      vim.g.nvim_tree_show_icons = {
+        folders = 0,
+        files = 0,
+        git = 0,
+        folder_arrows = 0,
+      }
 
       nvimtree.setup({
           view = {
@@ -21,6 +27,7 @@ return
                   },
               },
           },
+          
       })
 
       require('keymapper').register({
