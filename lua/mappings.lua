@@ -1,13 +1,18 @@
 -- wont work on first load
-local navigator = require('Navigator');
+--local navigator = require('Navigator');
+local navigator = require('smart-splits');
 local which = require('which-key');
 -- Keybindings
 require('keymapper').register({
   -- Tmux Navigator
-  ["<c-h>"] = { navigator.left, 'Navigate Left' },
-  ["<c-l>"] = { navigator.right, 'Navigate Right' },
-  ["<c-k>"] = { navigator.up, 'Navigate Up' },
-  ["<c-j>"] = { navigator.down, 'Navigate Down' },
+  ["<c-h>"] = { navigator.move_cursor_left, 'Navigate Left' },
+  ["<c-l>"] = { navigator.move_cursor_right, 'Navigate Right' },
+  ["<c-k>"] = { navigator.move_cursor_up, 'Navigate Up' },
+  ["<c-j>"] = { navigator.move_cursor_down, 'Navigate Down' },
+  ["<c-s-h>"] = { navigator.resize_left, 'Navigate Left' },
+  ["<c-s-l>"] = { navigator.resize_right, 'Navigate Right' },
+  ["<c-s-k>"] = { navigator.resize_up, 'Navigate Up' },
+  ["<c-s-j>"] = { navigator.resize_down, 'Navigate Down' },
   -- Preview all key bindings
   ['<leader>?'] = { which.show, "Preview all bindings" },
 

@@ -57,12 +57,13 @@ return {
   -- { "L3MON4D3/LuaSnip", version = "v<CurrentMajor>.*" },
 
   -- enable tmux navigation
-  {
-    'numToStr/Navigator.nvim',
-    config = function()
-      require('Navigator').setup()
-    end
-  },
+  { 'mrjones2014/smart-splits.nvim' },
+  -- {
+  --   'numToStr/Navigator.nvim',
+  --   config = function()
+  --     require('Navigator').setup()
+  --   end
+  -- },
 
 
   -- Helpful hints for keybinds
