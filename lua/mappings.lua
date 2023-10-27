@@ -9,10 +9,10 @@ require('keymapper').register({
   ["<c-l>"] = { navigator.move_cursor_right, 'Navigate Right' },
   ["<c-k>"] = { navigator.move_cursor_up, 'Navigate Up' },
   ["<c-j>"] = { navigator.move_cursor_down, 'Navigate Down' },
-  ["<c-s-h>"] = { navigator.resize_left, 'Navigate Left' },
-  ["<c-s-l>"] = { navigator.resize_right, 'Navigate Right' },
-  ["<c-s-k>"] = { navigator.resize_up, 'Navigate Up' },
-  ["<c-s-j>"] = { navigator.resize_down, 'Navigate Down' },
+  ["<c-a-h>"] = { navigator.resize_left, 'Resize Left' },
+  ["<c-a-l>"] = { navigator.resize_right, 'Resize Right' },
+  ["<c-a-k>"] = { navigator.resize_up, 'Resize Up' },
+  ["<c-a-j>"] = { navigator.resize_down, 'Resize Down' },
   -- Preview all key bindings
   ['<leader>?'] = { which.show, "Preview all bindings" },
 
