@@ -1,17 +1,53 @@
 local keymapper = require('keymapper')
+
+local hintsHidden = true
+local function toggleSuggestions()
+  -- TODO also have the goto_prev/next also only jump to warn/error when hidden
+  --
+  -- vim.lsp.handlers["textDocument/publishDiagnostics"] =
+  --     vim.lsp.with(
+  --       vim.lsp.diagnostic.on_publish_diagnostics,
+  --       { }
+  --     )
+  --
+  local severity = {
+    vim.diagnostic.severity.ERROR,
+    vim.diagnostic.severity.WARN,
+    vim.diagnostic.severity.INFO,
+    vim.diagnostic.severity.HINT,
+  }
+  if hintsHidden then
+    severity = {
+      vim.diagnostic.severity.ERROR,
+      vim.diagnostic.severity.WARN,
+    }
+  end
+
+  vim.diagnostic.config(
+    {
+      underline = {
+        severity = severity
+      },
+      virtual_text = {
+        -- language server's name--
+        severity = severity
+      }
+    })
+  hintsHidden = not hintsHidden
+end
+
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 keymapper.register({
   d = {
     name = "diagnostics",
-    -- TODO this one does not work right now
     e = { vim.diagnostic.open_float, "Open floating diagnostics" },
     q = { vim.diagnostic.setloclist, "Open fixlist diagnostics" },
     p = { vim.diagnostic.goto_prev, "Go to next diagnostic" },
-    n = { vim.diagnostic.goto_next, "Go to previous diagnostic" }
+    n = { vim.diagnostic.goto_next, "Go to previous diagnostic" },
+    t = { toggleSuggestions, "Toggle Suggestions" }
   }
 }, { prefix = "<leader>" })
-
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -50,7 +86,7 @@ local on_attach = function(arg)
       r = { vim.lsp.buf.rename, "Rename variable" },
       D = { vim.lsp.buf.type_definition, "Show type definitions" },
       -- TODO figure out what this is for
-      ["ca"] = { vim.lsp.buf.code_action, "Code action" },
+      -- ["ca"] = { vim.lsp.buf.code_action, "Code action" },
     }, { prefix = "<leader>", buffer = bufnr })
 
 
@@ -103,7 +139,7 @@ return {
         },
       },
     }
-    if true then
+    if false then
       lspconfig.csharp_ls.setup {
         on_attach = on_attach({}),
       }
@@ -112,7 +148,7 @@ return {
         handlers = {
           ["textDocument/definition"] = require('omnisharp_extended').handler,
         },
-        cmd = { "/usr/bin/dotnet", "/home/dlangevi/.local/share/nvim/mason/packages/omnisharp/libexec/OmniSharp.dll",
+        cmd = { "dotnet7", "/home/dlangevi/.local/share/nvim/mason/packages/omnisharp/libexec/OmniSharp.dll",
           "--languageserver" },
         on_attach = on_attach({}),
 

@@ -31,7 +31,7 @@ return
       })
 
       require('keymapper').register({
-          t = {
+          d = {
               name = "nvim-tree",
               d = {
                   api.tree.toggle, "Toggle NvimTree"
