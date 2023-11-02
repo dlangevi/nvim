@@ -1,17 +1,33 @@
-local function dump(o)
-  if type(o) == 'table' then
-    local s = '{ '
-    for k, v in pairs(o) do
-      if type(k) ~= 'number' then k = '"' .. k .. '"' end
-      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
-    end
-    return s .. '} '
-  else
-    return tostring(o)
-  end
-end
-
 return {
+  { -- Helpful hints for keybinds
+    "folke/which-key.nvim",
+    lazy = false,
+    priority = 999, -- load this first since many others depend on it for keybindings
+    config = function()
+      local which = require('which-key');
+      -- Keybindings
+      which.register({
+        -- Preview all key bindings
+        ['<leader>?'] = { which.show, "Preview all bindings" },
+        ['<leader>x'] = { "<cmd>RunCode<cr>", "Run Code" },
+        -- Old habit I have picked up from a previous leader key. switches to
+        -- whatever buffer was previously in the current pane
+        ['--'] = { ':edit<Space>#<cr>', "Edit previous file" },
+
+        -- Some way of doing this automatically would be nice when in nvim lua files
+        -- maybe some comment at the top of a file would indicate its safe to reload
+        ['<leader><leader>s'] = { '<cmd>source %<cr>', "Source current file" },
+
+        -- Easy quit (todo need an alterante macro binding
+        q = { ':q<CR>', "Quit" },
+
+      })
+    end
+  },
+
+  -- full signature help, docs and completion for the nvim lua API
+  "folke/neodev.nvim",
+
   -- Visual enhancements
   "lukas-reineke/indent-blankline.nvim",
   {
@@ -23,64 +39,15 @@ return {
       vim.cmd [[colorscheme sonokai]]
     end,
   },
-  {
-    "folke/neodev.nvim",
-    opts = {}
-  },
+
   {
     -- Adds #239299 Colors!
     'norcalli/nvim-colorizer.lua',
-    config = true,
-  },
-  -- {
-  --   'rmagatti/auto-session',
-  --   config = function()
-  --     require("auto-session").setup {
-  --       log_level = "error",
-  --       auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-  --
-  --     }
-  --   end
-  -- },
-  {
-    'linrongbin16/gitlinker.nvim',
-    requires = 'nvim-lua/plenary.nvim',
     config = function()
-      local keymapper = require('keymapper')
-      local gitlinker = require('gitlinker')
-
-      local options = {
-        mapping = false,
-      }
-      local function getlink()
-        gitlinker.link({
-          action = require("gitlinker.actions").system,
-          lstart = vim.api.nvim_buf_get_mark(0, '<')[1],
-          lend = vim.api.nvim_buf_get_mark(0, '>')[1]
-        })
-      end
-
-      gitlinker.setup(options)
-      keymapper.register({
-        l = {
-          y = { getlink, "Open in browser?" }
-        }
-      }, { mode = "n", prefix = "<leader>" })
-      keymapper.register({
-        l = {
-          y = { getlink, "Open in browser?" }
-        }
-      }, { mode = "v", prefix = "<leader>" })
-    end
-  },
-  {
-    'anuvyklack/help-vsplit.nvim',
-    config = function()
-      require('help-vsplit').setup({
-        always = true,
-        side = 'left',
+      require('colorizer').setup({
+        '*',
       })
-    end
+    end,
   },
 
   -- startup screen
@@ -108,21 +75,25 @@ return {
   },
 
   -- enable tmux navigation
-  { 'mrjones2014/smart-splits.nvim' },
-
-  -- Helpful hints for keybinds
   {
-    "folke/which-key.nvim",
-    lazy = false,
-    priority = 999, -- load this first since many others depend on it for keybindings
+    'mrjones2014/smart-splits.nvim',
     config = function()
-      require("which-key").setup {
-        plugins = {
-          spelling = {
-            enabled = true
-          }
-        }
-      }
+      local navigator = require('smart-splits');
+      local which = require('which-key');
+      -- Keybindings
+      which.register({
+        -- Tmux Navigator
+        ["<c-h>"] = { navigator.move_cursor_left, 'Navigate Left' },
+        ["<c-l>"] = { navigator.move_cursor_right, 'Navigate Right' },
+        ["<c-k>"] = { navigator.move_cursor_up, 'Navigate Up' },
+        ["<c-j>"] = { navigator.move_cursor_down, 'Navigate Down' },
+        ["<c-a-h>"] = { navigator.resize_left, 'Resize Left' },
+        ["<c-a-l>"] = { navigator.resize_right, 'Resize Right' },
+        ["<c-a-k>"] = { navigator.resize_up, 'Resize Up' },
+        ["<c-a-j>"] = { navigator.resize_down, 'Resize Down' },
+      })
     end
+
   },
+
 }

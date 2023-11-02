@@ -1,5 +1,4 @@
-local keymapper = require('keymapper')
-
+-- TODO this must be able to be made cleaner
 local hintsHidden = true
 local severity = {
   vim.diagnostic.severity.ERROR,
@@ -8,72 +7,63 @@ local severity = {
   vim.diagnostic.severity.HINT,
 }
 local function toggleSuggestions()
-  -- TODO also have the goto_prev/next also only jump to warn/error when hidden
-  --
-  -- vim.lsp.handlers["textDocument/publishDiagnostics"] =
-  --     vim.lsp.with(
-  --       vim.lsp.diagnostic.on_publish_diagnostics,
-  --       { }
-  --     )
-  --
   if hintsHidden then
-    severity = {
-      vim.diagnostic.severity.ERROR,
-      vim.diagnostic.severity.WARN,
-    }
+    severity[vim.diagnostic.severity.INFO] = nil
+    severity[vim.diagnostic.severity.HINT] = nil
   else
-    severity = {
-      vim.diagnostic.severity.ERROR,
-      vim.diagnostic.severity.WARN,
-      vim.diagnostic.severity.INFO,
-      vim.diagnostic.severity.HINT,
-    }
+    severity[vim.diagnostic.severity.INFO] = vim.diagnostic.severity.INFO
+    severity[vim.diagnostic.severity.HINT] = vim.diagnostic.severity.HINT
   end
 
-  vim.diagnostic.config(
-    {
-      underline = {
-        severity = severity
-      },
-      virtual_text = {
-        -- language server's name--
-        severity = severity
-      }
-    })
+  vim.diagnostic.config({
+    underline = {
+      severity = severity
+    },
+    virtual_text = {
+      -- language server's name--
+      severity = severity
+    }
+  })
   hintsHidden = not hintsHidden
+end
+
+local function goto_next()
+  vim.diagnostic.goto_next({
+    severity = severity
+  })
+end
+
+local function goto_prev()
+  vim.diagnostic.goto_prev({
+    severity = severity
+  })
 end
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-keymapper.register({
+local whichkey = require('which-key')
+whichkey.register({
   d = {
     name = "diagnostics",
     f = { vim.diagnostic.open_float, "Open floating diagnostics" },
     q = { vim.diagnostic.setloclist, "Open fixlist diagnostics" },
-    p = { function()
-      vim.diagnostic.goto_prev({
-        severity = severity
-      })
-    end, "Go to next diagnostic" },
-    n = { function()
-      vim.diagnostic.goto_next({
-        severity = severity
-      })
-    end, "Go to previous diagnostic" },
+    p = { goto_prev, "Go to previous diagnostic" },
+    n = { goto_next, "Go to next diagnostic" },
     t = { toggleSuggestions, "Toggle Suggestions" }
   }
 }, { prefix = "<leader>" })
 
--- Use an on_attach function to only map the following keys
+-- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(arg)
-  return function(client, bufnr)
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
     -- Enable completion triggered by <c-x><c-o>
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     -- Mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    keymapper.register({
+    whichkey.register({
       g = {
         name = "Go to",
         D = { vim.lsp.buf.declaration, "Declaration" },
@@ -82,14 +72,14 @@ local on_attach = function(arg)
         r = { vim.lsp.buf.references, "References" }
       },
       K = { vim.lsp.buf.hover, "lsp Hover" },
-    }, { buffer = bufnr })
+    }, { buffer = ev.buf })
 
-    keymapper.register({
+    whichkey.register({
       ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
-    }, { mode = "i", buffer = bufnr })
+    }, { mode = "i", buffer = ev.buf })
 
     -- Might want to put these all in a l = { 'lsp' } level?
-    keymapper.register({
+    whichkey.register({
       w = {
         name = "workspace",
         a = { vim.lsp.buf.add_workspace_folder, "Add workspace" },
@@ -102,26 +92,15 @@ local on_attach = function(arg)
       D = { vim.lsp.buf.type_definition, "Show type definitions" },
       -- TODO figure out what this is for
       -- ["ca"] = { vim.lsp.buf.code_action, "Code action" },
-    }, { prefix = "<leader>", buffer = bufnr })
+    }, { prefix = "<leader>", buffer = ev.buf })
 
 
-    keymapper.register({
+    whichkey.register({
       ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
-      f = { function()
-        if arg.customFormatter then
-          arg.customFormatter()
-        else
-          vim.lsp.buf.format { async = true }
-        end
-      end, "Format buffer" }
-    }, { prefix = "<leader>", buffer = bufnr })
+      f = { function() vim.lsp.buf.format({ async = true }) end, "Format buffer" },
+    }, { prefix = "<leader>", buffer = ev.buf })
   end
-end
-
-local lsp_flags = {
-  -- This is the default in Nvim 0.7+
-  debounce_text_changes = 150,
-}
+})
 
 return {
   "williamboman/mason.nvim",
@@ -131,81 +110,51 @@ return {
     'Hoffs/omnisharp-extended-lsp.nvim',
   },
   config = function()
-    require("mason").setup()
-    require("mason-lspconfig").setup()
     local lspconfig = require("lspconfig")
-
-    lspconfig.lua_ls.setup {
-      on_attach = on_attach({}),
-      flags = lsp_flags,
-      settings = {
-        Lua = {
-          runtime = {
-            version = 'LuaJIT',
-          },
-          diagnostics = {
-            -- Get the language server to recognize the `vim` global
-            globals = { 'vim' },
-          },
-          workspace = {
-            -- Make the server aware of Neovim runtime files
-            library = vim.api.nvim_get_runtime_file("", true),
-          },
-        },
-      },
-    }
-    if false then
-      lspconfig.csharp_ls.setup {
-        on_attach = on_attach({}),
-      }
-    else
-      lspconfig.omnisharp.setup {
-        handlers = {
-          ["textDocument/definition"] = require('omnisharp_extended').handler,
-        },
-        cmd = { "dotnet7", "/home/dlangevi/.local/share/nvim/mason/packages/omnisharp/libexec/OmniSharp.dll",
-          "--languageserver" },
-        on_attach = on_attach({}),
-
-        -- Enables support for reading code style, naming convention and analyzer
-        -- settings from .editorconfig.
-        enable_editorconfig_support = true,
-
-        -- If true, MSBuild project system will only load projects for files that
-        -- were opened in the editor. This setting is useful for big C# codebases
-        -- and allows for faster initialization of code navigation features only
-        -- for projects that are relevant to code that is being edited. With this
-        -- setting enabled OmniSharp may load fewer projects and may thus display
-        -- incomplete reference lists for symbols.
-        enable_ms_build_load_projects_on_demand = false,
-
-        -- Enables support for roslyn analyzers, code fixes and rulesets.
-        enable_roslyn_analyzers = true,
-
-        -- Specifies whether 'using' directives should be grouped and sorted during
-        -- document formatting.
-        organize_imports_on_format = false,
-
-        -- Enables support for showing unimported types and unimported extension
-        -- methods in completion lists. When committed, the appropriate using
-        -- directive will be added at the top of the current file. This option can
-        -- have a negative impact on initial completion responsiveness,
-        -- particularly for the first few completion sessions after opening a
-        -- solution.
-        enable_import_completion = true,
-
-        -- Specifies whether to include preview versions of the .NET SDK when
-        -- determining which version to use for project loading.
-        sdk_include_prereleases = true,
-
-        -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
-        -- true
-        analyze_open_documents_only = false,
-      }
-      -- lspconfig.csharp_ls.setup{
-      --   on_attach = on_attach({}),
-      --   flags = lsp_flags,
-      -- }
+    require("mason").setup()
+    local function getInstallPath(package)
+      local registry = require("mason-registry")
+      return registry.get_package(package):get_install_path()
     end
+    require("mason-lspconfig").setup({
+      handlers = {
+        lua_ls = function()
+          lspconfig.lua_ls.setup {
+            settings = {
+              Lua = {
+                runtime = { version = 'LuaJIT', },
+                diagnostics = {
+                  -- Get the language server to recognize the `vim` global
+                  globals = { 'vim' },
+                },
+                workspace = {
+                  -- Make the server aware of Neovim runtime files
+                  library = vim.api.nvim_get_runtime_file("", true),
+                  checkThirdParty = false,
+                },
+              },
+            },
+          }
+        end,
+        omnisharp = function()
+          lspconfig.omnisharp.setup {
+            handlers = {
+              ["textDocument/definition"] = require('omnisharp_extended').handler,
+            },
+            cmd = { "dotnet7", getInstallPath("omnisharp") .. "/libexec/OmniSharp.dll",
+              "--languageserver" },
+            enable_editorconfig_support = true,
+            -- set to true if working in a huge codebase maybe
+            enable_ms_build_load_projects_on_demand = false,
+            enable_roslyn_analyzers = true,
+            organize_imports_on_format = false,
+            -- doesn't seem to work?
+            enable_import_completion = true,
+            sdk_include_prereleases = true,
+            analyze_open_documents_only = false,
+          }
+        end
+      }
+    })
   end
 }

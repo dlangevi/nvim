@@ -1,4 +1,4 @@
-local keymapper = require('keymapper')
+local wk = require('which-key')
 
 return {
   {
@@ -20,7 +20,7 @@ return {
 
       })
 
-      keymapper.register({
+      wk.register({
         t = {
           name = "tests",
           r = { neotest.run.run, "Run Test" },
@@ -41,7 +41,7 @@ return {
         lcov_file = 'coveragereport/lcov.info'
       })
 
-      keymapper.register({
+      wk.register({
         c = {
           name = "coverage",
           l = { coverage.load_lcov, "Load lcov file" },

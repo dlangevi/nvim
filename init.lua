@@ -11,12 +11,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Settings required before lazy 
+-- Settings required before lazy ? are they ?
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.opt.termguicolors = true
 
 require('lazy').setup('plugins')
-require('autorun')
-require('mappings')
-require('options')

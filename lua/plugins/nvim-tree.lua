@@ -23,7 +23,7 @@ return
       },
     })
 
-    require('keymapper').register({
+    require('which-key').register({
       d = {
         name = "nvim-tree",
         d = {

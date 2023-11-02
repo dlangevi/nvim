@@ -1,6 +1,12 @@
-
-windowsCmd = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
-linuxCmd = 'make'
+local function getBuildCommand()
+  -- If it is not linux its windows
+  if not vim.fn.has("linux") then
+    return 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && ' ..
+        'cmake --build build --config Release && ' ..
+        'cmake --install build --prefix build'
+  end
+  return 'make'
+end
 
 return {
   'nvim-telescope/telescope.nvim',
@@ -9,7 +15,7 @@ return {
     { 'nvim-lua/plenary.nvim' },
     {
       'nvim-telescope/telescope-fzf-native.nvim',
-      build = windowsCmd 
+      build = getBuildCommand()
     }
   },
   config = function()
@@ -25,9 +31,9 @@ return {
       defaults = {
         mappings = {
           i = {
-                ["<C-j>"] = "move_selection_next",
-                ["<C-k>"] = "move_selection_previous",
-                ['<C-q>'] = actions.smart_add_to_qflist + actions.open_qflist,
+            ["<C-j>"] = "move_selection_next",
+            ["<C-k>"] = "move_selection_previous",
+            ['<C-q>'] = actions.smart_add_to_qflist + actions.open_qflist,
           }
         }
       },
@@ -39,10 +45,10 @@ return {
         help_tags = {
           mappings = {
             i = {
-                  ["<CR>"] = "select_vertical",
+              ["<CR>"] = "select_vertical",
             },
             n = {
-                  ["<CR>"] = "select_vertical",
+              ["<CR>"] = "select_vertical",
             },
           },
         },
@@ -53,7 +59,7 @@ return {
 
     local builtin = require('telescope.builtin')
 
-    require('keymapper').register({
+    require('which-key').register({
       s = {
         name = "telescope",
         f = { builtin.find_files, "Find File" },
