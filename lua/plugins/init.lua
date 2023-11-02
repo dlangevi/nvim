@@ -1,3 +1,16 @@
+local function dump(o)
+  if type(o) == 'table' then
+    local s = '{ '
+    for k, v in pairs(o) do
+      if type(k) ~= 'number' then k = '"' .. k .. '"' end
+      s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+    end
+    return s .. '} '
+  else
+    return tostring(o)
+  end
+end
+
 return {
   -- Visual enhancements
   "lukas-reineke/indent-blankline.nvim",
@@ -11,24 +24,64 @@ return {
     end,
   },
   {
+    "folke/neodev.nvim",
+    opts = {}
+  },
+  {
     -- Adds #239299 Colors!
     'norcalli/nvim-colorizer.lua',
     config = true,
   },
   -- {
-  --   "jackMort/ChatGPT.nvim",
+  --   'rmagatti/auto-session',
   --   config = function()
-  --     require("chatgpt").setup({
-  --       -- optional configuration
-  --     })
-  --   end,
-  --   dependencies = {
-  --     "MunifTanjim/nui.nvim",
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-telescope/telescope.nvim"
-  --   }
+  --     require("auto-session").setup {
+  --       log_level = "error",
+  --       auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
   --
+  --     }
+  --   end
   -- },
+  {
+    'linrongbin16/gitlinker.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    config = function()
+      local keymapper = require('keymapper')
+      local gitlinker = require('gitlinker')
+
+      local options = {
+        mapping = false,
+      }
+      local function getlink()
+        gitlinker.link({
+          action = require("gitlinker.actions").system,
+          lstart = vim.api.nvim_buf_get_mark(0, '<')[1],
+          lend = vim.api.nvim_buf_get_mark(0, '>')[1]
+        })
+      end
+
+      gitlinker.setup(options)
+      keymapper.register({
+        l = {
+          y = { getlink, "Open in browser?" }
+        }
+      }, { mode = "n", prefix = "<leader>" })
+      keymapper.register({
+        l = {
+          y = { getlink, "Open in browser?" }
+        }
+      }, { mode = "v", prefix = "<leader>" })
+    end
+  },
+  {
+    'anuvyklack/help-vsplit.nvim',
+    config = function()
+      require('help-vsplit').setup({
+        always = true,
+        side = 'left',
+      })
+    end
+  },
 
   -- startup screen
   {
@@ -50,21 +103,12 @@ return {
     "kylechui/nvim-surround",
     version = "*", -- for stability
     config = function()
-      require("nvim-surround").setup({
-      })
+      require("nvim-surround").setup({})
     end
   },
-  -- { "L3MON4D3/LuaSnip", version = "v<CurrentMajor>.*" },
 
   -- enable tmux navigation
   { 'mrjones2014/smart-splits.nvim' },
-  -- {
-  --   'numToStr/Navigator.nvim',
-  --   config = function()
-  --     require('Navigator').setup()
-  --   end
-  -- },
-
 
   -- Helpful hints for keybinds
   {

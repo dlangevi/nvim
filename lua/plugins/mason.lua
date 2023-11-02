@@ -1,6 +1,12 @@
 local keymapper = require('keymapper')
 
 local hintsHidden = true
+local severity = {
+  vim.diagnostic.severity.ERROR,
+  vim.diagnostic.severity.WARN,
+  vim.diagnostic.severity.INFO,
+  vim.diagnostic.severity.HINT,
+}
 local function toggleSuggestions()
   -- TODO also have the goto_prev/next also only jump to warn/error when hidden
   --
@@ -10,16 +16,17 @@ local function toggleSuggestions()
   --       { }
   --     )
   --
-  local severity = {
-    vim.diagnostic.severity.ERROR,
-    vim.diagnostic.severity.WARN,
-    vim.diagnostic.severity.INFO,
-    vim.diagnostic.severity.HINT,
-  }
   if hintsHidden then
     severity = {
       vim.diagnostic.severity.ERROR,
       vim.diagnostic.severity.WARN,
+    }
+  else
+    severity = {
+      vim.diagnostic.severity.ERROR,
+      vim.diagnostic.severity.WARN,
+      vim.diagnostic.severity.INFO,
+      vim.diagnostic.severity.HINT,
     }
   end
 
@@ -41,10 +48,18 @@ end
 keymapper.register({
   d = {
     name = "diagnostics",
-    e = { vim.diagnostic.open_float, "Open floating diagnostics" },
+    f = { vim.diagnostic.open_float, "Open floating diagnostics" },
     q = { vim.diagnostic.setloclist, "Open fixlist diagnostics" },
-    p = { vim.diagnostic.goto_prev, "Go to next diagnostic" },
-    n = { vim.diagnostic.goto_next, "Go to previous diagnostic" },
+    p = { function()
+      vim.diagnostic.goto_prev({
+        severity = severity
+      })
+    end, "Go to next diagnostic" },
+    n = { function()
+      vim.diagnostic.goto_next({
+        severity = severity
+      })
+    end, "Go to previous diagnostic" },
     t = { toggleSuggestions, "Toggle Suggestions" }
   }
 }, { prefix = "<leader>" })

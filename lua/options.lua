@@ -7,13 +7,12 @@ vim.opt.foldenable = false
 vim.opt.undofile = false
 vim.opt.relativenumber = true
 vim.opt.nu = true
-vim.opt.clipboard = "unnamed"
+-- This absolutly destroys startup time on windows + wsl
+-- vim.opt.clipboard = "unnamed"
 
 vim.opt.autoindent = true
 vim.opt.expandtab = true
 -- Why is this a global vs opt?
-vim.g.smartab = true
-vim.g.leetcode_browser = 'firefox'
 vim.opt.softtabstop = 2
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2

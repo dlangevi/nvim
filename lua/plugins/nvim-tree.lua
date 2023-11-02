@@ -7,17 +7,11 @@ return
   config = function()
     local nvimtree = require('nvim-tree')
     local api = require('nvim-tree.api')
-    vim.g.nvim_tree_show_icons = {
-      folders = 0,
-      files = 0,
-      git = 0,
-      folder_arrows = 0,
-    }
-
     nvimtree.setup({
       view = {
         side = "right",
         preserve_window_proportions = true,
+        width = 50,
       },
       actions = {
         open_file = {
@@ -38,4 +32,5 @@ return
       }
     }, { prefix = "<leader>" })
   end,
+  keys = "<leader>d",
 }
