@@ -88,14 +88,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Might want to put these all in a l = { 'lsp' } level?
     wk.register({
-      w = {
-        name = "workspace",
-        a = { vim.lsp.buf.add_workspace_folder, "Add workspace" },
-        r = { vim.lsp.buf.remove_workspace_folder, "Remove workspace" },
-        l = { function()
-          print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, "List workspaces" },
-      },
       r = { vim.lsp.buf.rename, "Rename variable" },
       D = { vim.lsp.buf.type_definition, "Show type definitions" },
       -- TODO figure out what this is for

@@ -60,19 +60,8 @@ return {
   },
 
   -- added editing functionality
-  {
-    'numToStr/Comment.nvim',
-    config = function()
-      require('Comment').setup()
-    end
-  },
-  {
-    "kylechui/nvim-surround",
-    version = "*", -- for stability
-    config = function()
-      require("nvim-surround").setup({})
-    end
-  },
+  { 'numToStr/Comment.nvim', opts = {} },
+  { "kylechui/nvim-surround", config = true },
 
   -- enable tmux navigation
   {
