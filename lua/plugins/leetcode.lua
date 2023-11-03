@@ -35,12 +35,8 @@
 -- TODO setup as above
 return {
   "Dhanus3133/LeetBuddy.nvim",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    "nvim-telescope/telescope.nvim",
-  },
-  config = function()
-    require("leetbuddy").setup({})
+  config = true,
+  init = function()
   end,
   keys = {
     -- { "<leader>lq", "<cmd>LBQuestions<cr>", desc = "List Questions" },

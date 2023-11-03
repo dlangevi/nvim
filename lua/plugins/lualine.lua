@@ -1,7 +1,29 @@
 return {
   'nvim-lualine/lualine.nvim',
   -- eependencies = { 'nvim-tree/nvim-web-devicons' },
-  config = function()
+  opts = {
+    options = {
+      -- theme is added
+    },
+    sections = {
+      lualine_c = { {
+        'filename',
+        path = 1,
+      } },
+    },
+    winbar = {
+      lualine_a = { 'filetype' },
+      lualine_b = {},
+      lualine_c = { 'filename' },
+    },
+    inactive_winbar = {
+      lualine_a = { 'filetype' },
+      lualine_b = {},
+      lualine_c = { 'filename' },
+    }
+
+  },
+  config = function(_, opts)
     local horizon = require('lualine.themes.horizon')
 
     local colors = {
@@ -19,27 +41,7 @@ return {
       myinactive   = '#aaaaaa'
     }
     horizon.inactive.c.fg = colors.myinactive
-
-    require('lualine').setup({
-      options = {
-        theme = horizon,
-      },
-      sections = {
-        lualine_c = { {
-          'filename',
-          path = 1,
-        } },
-      },
-      winbar = {
-        lualine_a = { 'filetype' },
-        lualine_b = {},
-        lualine_c = { 'filename' },
-      },
-      inactive_winbar = {
-        lualine_a = { 'filetype' },
-        lualine_b = {},
-        lualine_c = { 'filename' },
-      }
-    })
+    opts.options.theme = horizon
+    require('lualine').setup(opts)
   end,
 }

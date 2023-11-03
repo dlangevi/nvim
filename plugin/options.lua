@@ -9,6 +9,7 @@ vim.opt.relativenumber = true
 vim.opt.nu = true
 -- This absolutly destroys startup time on windows + wsl
 -- vim.opt.clipboard = "unnamed"
+vim.opt.list = true
 
 vim.opt.autoindent = true
 vim.opt.expandtab = true

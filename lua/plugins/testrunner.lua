@@ -4,8 +4,6 @@ return {
   {
     "nvim-neotest/neotest",
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "antoinemadec/FixCursorHold.nvim",
       "Issafalcon/neotest-dotnet"
     },
     config = function()
@@ -17,7 +15,6 @@ return {
         output = {
           open_on_run = false
         }
-
       })
 
       wk.register({
@@ -34,7 +31,6 @@ return {
   },
   {
     "andythigpen/nvim-coverage",
-    requires = "nvim-lua/plenary.nvim",
     config = function()
       local coverage = require("coverage")
       coverage.setup({

@@ -1,15 +1,13 @@
 return {
   { -- Helpful hints for keybinds
     "folke/which-key.nvim",
-    lazy = false,
-    priority = 999, -- load this first since many others depend on it for keybindings
-    config = function()
+    lazy = true,
+    init = function()
       local which = require('which-key');
       -- Keybindings
       which.register({
         -- Preview all key bindings
         ['<leader>?'] = { which.show, "Preview all bindings" },
-        ['<leader>x'] = { "<cmd>RunCode<cr>", "Run Code" },
         -- Old habit I have picked up from a previous leader key. switches to
         -- whatever buffer was previously in the current pane
         ['--'] = { ':edit<Space>#<cr>', "Edit previous file" },
@@ -19,6 +17,7 @@ return {
         ['<leader><leader>s'] = { '<cmd>source %<cr>', "Source current file" },
 
         -- Easy quit (todo need an alterante macro binding
+        -- Maybe want to make this <leader>q ?
         q = { ':q<CR>', "Quit" },
 
       })
@@ -26,10 +25,21 @@ return {
   },
 
   -- full signature help, docs and completion for the nvim lua API
-  "folke/neodev.nvim",
+  { "folke/neodev.nvim",     config = true },
+  { 'nvim-lua/plenary.nvim', lazy = true },
 
   -- Visual enhancements
-  {"lukas-reineke/indent-blankline.nvim", main="ibl", opts={} },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {
+      indent = {
+      },
+      scope = {
+        enabled = false,
+      },
+    }
+  },
   {
     -- Our main colorscheme
     'sainnhe/sonokai',
@@ -43,11 +53,7 @@ return {
   {
     -- Adds #239299 Colors!
     'norcalli/nvim-colorizer.lua',
-    config = function()
-      require('colorizer').setup({
-        '*',
-      })
-    end,
+    opts = { '*' },
   },
 
   -- startup screen
@@ -60,13 +66,14 @@ return {
   },
 
   -- added editing functionality
-  { 'numToStr/Comment.nvim', opts = {} },
-  { "kylechui/nvim-surround", config = true },
+  { 'numToStr/Comment.nvim',    config = true },
+  { "kylechui/nvim-surround",   config = true },
+  { 'ethanholz/nvim-lastplace', config = true },
 
   -- enable tmux navigation
   {
     'mrjones2014/smart-splits.nvim',
-    config = function()
+    init = function()
       local navigator = require('smart-splits');
       local which = require('which-key');
       -- Keybindings
