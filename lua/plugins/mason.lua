@@ -41,8 +41,8 @@ end
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local whichkey = require('which-key')
-whichkey.register({
+local wk = require('which-key')
+wk.register({
   d = {
     name = "diagnostics",
     f = { vim.diagnostic.open_float, "Open floating diagnostics" },
@@ -58,12 +58,20 @@ whichkey.register({
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    -- The lspclient that has just attached
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    local function formatBuffer()
+      -- volar's format doesnt respect eslint rules
+      -- until I find a way to do that, this ugly hack
+      -- will work
+      if client.name == "volar" then
+        vim.cmd "EslintFixAll"
+      else
+        vim.lsp.buf.format({ async = true })
+      end
+    end
 
-    -- Mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    whichkey.register({
+    wk.register({
       g = {
         name = "Go to",
         D = { vim.lsp.buf.declaration, "Declaration" },
@@ -74,12 +82,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
       K = { vim.lsp.buf.hover, "lsp Hover" },
     }, { buffer = ev.buf })
 
-    whichkey.register({
+    wk.register({
       ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
     }, { mode = "i", buffer = ev.buf })
 
     -- Might want to put these all in a l = { 'lsp' } level?
-    whichkey.register({
+    wk.register({
       w = {
         name = "workspace",
         a = { vim.lsp.buf.add_workspace_folder, "Add workspace" },
@@ -92,13 +100,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
       D = { vim.lsp.buf.type_definition, "Show type definitions" },
       -- TODO figure out what this is for
       -- ["ca"] = { vim.lsp.buf.code_action, "Code action" },
-    }, { prefix = "<leader>", buffer = ev.buf })
-
-
-    whichkey.register({
       ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
-      f = { function() vim.lsp.buf.format({ async = true }) end, "Format buffer" },
+      f = { formatBuffer, "Format buffer" },
     }, { prefix = "<leader>", buffer = ev.buf })
+
+
   end
 })
 
@@ -118,6 +124,11 @@ return {
     end
     require("mason-lspconfig").setup({
       handlers = {
+        -- handles jsonls rust_analyzer gopls
+        function(server_name) -- default handler
+          lspconfig[server_name].setup {}
+        end,
+
         lua_ls = function()
           lspconfig.lua_ls.setup {
             settings = {
@@ -136,6 +147,43 @@ return {
             },
           }
         end,
+
+        volar = function()
+          lspconfig.volar.setup {
+            filetypes = {
+              'typescript',
+              'javascript',
+              'javascriptreact',
+              'typescriptreact',
+              'vue',
+              'html',
+              'json'
+            },
+            --[[ on_attach = on_attach({
+              -- TODO Still not too happy with this
+              customFormatter = function()
+                vim.cmd "EslintFixAll"
+              end
+            }), ]]
+          }
+        end,
+
+        eslint = function()
+          lspconfig.eslint.setup {
+            filetypes = {
+              'typescript',
+              'javascript',
+              'vue',
+            },
+            on_attach = function(_, bufnr)
+              vim.api.nvim_create_autocmd("BufWritePre", {
+                buffer = bufnr,
+                command = "EslintFixAll",
+              })
+            end,
+          }
+        end,
+
         omnisharp = function()
           lspconfig.omnisharp.setup {
             handlers = {

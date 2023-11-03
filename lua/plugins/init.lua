@@ -29,7 +29,7 @@ return {
   "folke/neodev.nvim",
 
   -- Visual enhancements
-  "lukas-reineke/indent-blankline.nvim",
+  {"lukas-reineke/indent-blankline.nvim", main="ibl", opts={} },
   {
     -- Our main colorscheme
     'sainnhe/sonokai',
