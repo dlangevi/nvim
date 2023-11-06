@@ -28,6 +28,14 @@ return {
   { "folke/neodev.nvim",     config = true },
   { 'nvim-lua/plenary.nvim', lazy = true },
 
+  {
+    'EtiamNullam/deferred-clipboard.nvim',
+    opts = {
+      lazy = true,
+      -- fallback = 'unnamedplus',
+    },
+  },
+
   -- Visual enhancements
   {
     "lukas-reineke/indent-blankline.nvim",
