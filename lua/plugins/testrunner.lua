@@ -4,10 +4,15 @@ return {
   {
     "nvim-neotest/neotest",
     dependencies = {
-      "Issafalcon/neotest-dotnet"
+      "mfussenegger/nvim-dap",
+      "Issafalcon/neotest-dotnet",
+      "rcarriga/nvim-dap-ui"
     },
     config = function()
       local neotest = require("neotest")
+      local dap = require("dap")
+      local dapui = require("dapui")
+      dapui.setup()
       neotest.setup({
         adapters = {
           require("neotest-dotnet")
@@ -16,11 +21,51 @@ return {
           open_on_run = false
         }
       })
+      local function getInstallPath(package)
+        local registry = require("mason-registry")
+        return registry.get_package(package):get_install_path()
+      end
+
+      dap.adapters.netcoredbg = {
+        type = 'executable',
+        command = getInstallPath("netcoredbg") .. "/netcoredbg",
+        args = { '--interpreter=vscode' }
+      }
+
+      dap.configurations.cs = {
+        {
+          type = "coreclr",
+          name = "launch - netcoredbg",
+          request = "launch",
+          program = function()
+            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+          end,
+        },
+      }
+
+      wk.register({
+        b = {
+          name = "breakpoints",
+          t = { dap.toggle_breakpoint, "Toggle breakpoint" },
+        }
+      }, { prefix = "<leader>" })
+
+      wk.register({
+        da = {
+          name = "DAP UI",
+          o = { dapui.open , "Open dap ui" },
+          c = { dapui.close , "Close dap ui" },
+          t = { dapui.toggle, "Toggle dap ui" },
+        }
+      }, { prefix = "<leader>" })
 
       wk.register({
         t = {
           name = "tests",
           r = { neotest.run.run, "Run Test" },
+          e = { function()
+            neotest.run.run({ strategy = "dap" })
+          end, "Run Test with DAP" },
           d = { neotest.output_panel.toggle, "Toggle Ouput Panel" },
           c = { neotest.output_panel.clear, "Clear Output Panel" },
           f = { neotest.output.open, "Display Float" },

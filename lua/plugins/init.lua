@@ -25,8 +25,19 @@ return {
   },
 
   -- full signature help, docs and completion for the nvim lua API
-  { "folke/neodev.nvim",     config = true },
-  { 'nvim-lua/plenary.nvim', lazy = true },
+  {
+    "folke/neodev.nvim",
+    opts = {
+      library = {
+        plugins = {
+          "nvim-dap-ui",
+          "nvim-dap"
+        },
+        types = true
+      },
+    },
+  },
+  { 'nvim-lua/plenary.nvim',    lazy = true },
 
   {
     'EtiamNullam/deferred-clipboard.nvim',

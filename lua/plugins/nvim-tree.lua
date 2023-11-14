@@ -28,6 +28,13 @@ return
         d = {
           api.tree.toggle, "Toggle NvimTree"
         },
+        r = {
+          function()
+            local cwd = vim.loop.cwd();
+            print(cwd)
+            api.tree.change_root(cwd);
+          end, "Restore root"
+        }
       }
     }, { prefix = "<leader>" })
   end,
