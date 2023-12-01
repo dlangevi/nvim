@@ -9,18 +9,21 @@ end
 vim.mapname("<leader>l", 'gitlinker')
 
 return {
-  'linrongbin16/gitlinker.nvim',
-  requires = 'nvim-lua/plenary.nvim',
-  keys = {
-    { "<leader>ly", getlink, desc = "Open in browser" },
-    {
-      "<leader>ly",
-      getlink,
-      desc = "Open in browser",
-      mode = "v"
+  'tpope/vim-fugitive',
+  {
+    'linrongbin16/gitlinker.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    keys = {
+      { "<leader>ly", getlink, desc = "Open in browser" },
+      {
+        "<leader>ly",
+        getlink,
+        desc = "Open in browser",
+        mode = "v"
+      }
+    },
+    opts = {
+      mapping = false,
     }
-  },
-  opts = {
-    mapping = false,
   }
 }
