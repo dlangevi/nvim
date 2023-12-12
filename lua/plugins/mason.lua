@@ -1,19 +1,11 @@
 -- TODO this must be able to be made cleaner
-local hintsHidden = true
+local hintsHidden = false
 local severity = {
   vim.diagnostic.severity.ERROR,
   vim.diagnostic.severity.WARN,
   vim.diagnostic.severity.INFO,
   vim.diagnostic.severity.HINT,
 }
-
-local function toggleSuggestions()
-  if hintsHidden then 
-    enableSuggestions()
-  else
-    disableSuggestions()
-  end
-end
 
 local function updateDiagnostics()
   vim.diagnostic.config({
@@ -26,7 +18,7 @@ local function updateDiagnostics()
     }
   })
 end
-toggleSuggestions()
+updateDiagnostics()
 
 local function disableSuggestions()
   severity[vim.diagnostic.severity.INFO] = nil
@@ -40,6 +32,14 @@ local function enableSuggestions()
   severity[vim.diagnostic.severity.HINT] = vim.diagnostic.severity.HINT
   updateDiagnostics()
   hintsHidden = false
+end
+
+local function toggleSuggestions()
+  if hintsHidden then
+    enableSuggestions()
+  else
+    disableSuggestions()
+  end
 end
 
 
@@ -113,8 +113,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
       ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
       f = { formatBuffer, "Format buffer" },
     }, { prefix = "<leader>", buffer = ev.buf })
-
-
   end
 })
 
