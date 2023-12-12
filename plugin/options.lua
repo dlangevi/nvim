@@ -8,7 +8,7 @@ vim.opt.undofile = false
 vim.opt.relativenumber = true
 vim.opt.nu = true
 -- This absolutly destroys startup time on windows + wsl
--- vim.opt.clipboard = "unnamed"
+vim.opt.clipboard = "unnamedplus"
 vim.opt.list = true
 
 vim.opt.autoindent = true

@@ -6,6 +6,7 @@ local severity = {
   vim.diagnostic.severity.INFO,
   vim.diagnostic.severity.HINT,
 }
+
 local function toggleSuggestions()
   if hintsHidden then 
     enableSuggestions()
@@ -25,6 +26,7 @@ local function updateDiagnostics()
     }
   })
 end
+toggleSuggestions()
 
 local function disableSuggestions()
   severity[vim.diagnostic.severity.INFO] = nil
@@ -107,7 +109,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       r = { vim.lsp.buf.rename, "Rename variable" },
       D = { vim.lsp.buf.type_definition, "Show type definitions" },
       -- TODO figure out what this is for
-      -- ["ca"] = { vim.lsp.buf.code_action, "Code action" },
+      ["ca"] = { vim.lsp.buf.code_action, "Code action" },
       ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
       f = { formatBuffer, "Format buffer" },
     }, { prefix = "<leader>", buffer = ev.buf })

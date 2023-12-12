@@ -61,7 +61,11 @@ return {
     require('which-key').register({
       s = {
         name = "telescope",
-        f = { builtin.find_files, "Find File" },
+        f = { function()
+          builtin.find_files({
+            hidden = true,
+          })
+        end, "Find File" },
         p = { builtin.git_files, "Find git Files" },
         b = { builtin.buffers, "Find Buffer" },
         g = { builtin.live_grep, "Grep Project" },

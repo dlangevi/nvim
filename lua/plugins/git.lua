@@ -10,6 +10,7 @@ vim.mapname("<leader>l", 'gitlinker')
 
 return {
   'tpope/vim-fugitive',
+  'tommcdo/vim-fugitive-blame-ext',
   {
     'linrongbin16/gitlinker.nvim',
     requires = 'nvim-lua/plenary.nvim',

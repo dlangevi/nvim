@@ -33,10 +33,10 @@ return {
               ),
           },
               sources = {
-                  { name = "path" },
-                  { name = "nvim_lsp" },
-                  { name = "buffer",  keyword_length = 5 },
-                  { name = "luasnip" },
+                  { name = "path", max_item_count = 3 },
+                  { name = "luasnip", priority = 100 },
+                  { name = "nvim_lsp", max_item_count = 30 },
+                  { name = "buffer",  keyword_length = 10 },
                   { name = "nvim_lua" },
               },
 
