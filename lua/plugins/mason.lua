@@ -7,14 +7,14 @@ local severity = {
   vim.diagnostic.severity.HINT,
 }
 local function toggleSuggestions()
-  if hintsHidden then
-    severity[vim.diagnostic.severity.INFO] = nil
-    severity[vim.diagnostic.severity.HINT] = nil
+  if hintsHidden then 
+    enableSuggestions()
   else
-    severity[vim.diagnostic.severity.INFO] = vim.diagnostic.severity.INFO
-    severity[vim.diagnostic.severity.HINT] = vim.diagnostic.severity.HINT
+    disableSuggestions()
   end
+end
 
+local function updateDiagnostics()
   vim.diagnostic.config({
     underline = {
       severity = severity
@@ -24,8 +24,22 @@ local function toggleSuggestions()
       severity = severity
     }
   })
-  hintsHidden = not hintsHidden
 end
+
+local function disableSuggestions()
+  severity[vim.diagnostic.severity.INFO] = nil
+  severity[vim.diagnostic.severity.HINT] = nil
+  updateDiagnostics()
+  hintsHidden = true
+end
+
+local function enableSuggestions()
+  severity[vim.diagnostic.severity.INFO] = vim.diagnostic.severity.INFO
+  severity[vim.diagnostic.severity.HINT] = vim.diagnostic.severity.HINT
+  updateDiagnostics()
+  hintsHidden = false
+end
+
 
 local function goto_next()
   vim.diagnostic.goto_next({
@@ -49,7 +63,9 @@ wk.register({
     q = { vim.diagnostic.setloclist, "Open fixlist diagnostics" },
     p = { goto_prev, "Go to previous diagnostic" },
     n = { goto_next, "Go to next diagnostic" },
-    t = { toggleSuggestions, "Toggle Suggestions" }
+    t = { toggleSuggestions, "Toggle Suggestions" },
+    d = { disableSuggestions, "Disable Suggestions" },
+    e = { enableSuggestions, "Enable Suggestions" }
   }
 }, { prefix = "<leader>" })
 
@@ -181,7 +197,7 @@ return {
             handlers = {
               ["textDocument/definition"] = require('omnisharp_extended').handler,
             },
-            cmd = { "dotnet7", getInstallPath("omnisharp") .. "/libexec/OmniSharp.dll",
+            cmd = { "dotnet", getInstallPath("omnisharp") .. "/libexec/OmniSharp.dll",
               "--languageserver" },
             enable_editorconfig_support = true,
             -- set to true if working in a huge codebase maybe
