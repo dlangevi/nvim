@@ -1,10 +1,7 @@
 -- TODO this must be able to be made cleaner
-local hintsHidden = false
+local hintsHidden = true
 local severity = {
-  vim.diagnostic.severity.ERROR,
-  vim.diagnostic.severity.WARN,
-  vim.diagnostic.severity.INFO,
-  vim.diagnostic.severity.HINT,
+  min = vim.diagnostic.severity.WARN
 }
 
 local function updateDiagnostics()
@@ -17,19 +14,18 @@ local function updateDiagnostics()
       severity = severity
     }
   })
+  vim.print(severity)
 end
 updateDiagnostics()
 
 local function disableSuggestions()
-  severity[vim.diagnostic.severity.INFO] = nil
-  severity[vim.diagnostic.severity.HINT] = nil
+  severity.min = vim.diagnostic.severity.WARN;
   updateDiagnostics()
   hintsHidden = true
 end
 
 local function enableSuggestions()
-  severity[vim.diagnostic.severity.INFO] = vim.diagnostic.severity.INFO
-  severity[vim.diagnostic.severity.HINT] = vim.diagnostic.severity.HINT
+  severity.min = vim.diagnostic.severity.HINT;
   updateDiagnostics()
   hintsHidden = false
 end
