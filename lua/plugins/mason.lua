@@ -103,17 +103,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
     wk.register({
       r = { vim.lsp.buf.rename, "Rename variable" },
       D = { vim.lsp.buf.type_definition, "Show type definitions" },
-      -- TODO figure out what this is for
       ["ca"] = { vim.lsp.buf.code_action, "Code action" },
       ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
       f = { formatBuffer, "Format buffer" },
     }, { prefix = "<leader>", buffer = ev.buf })
+
+    wk.register({
+      ["ca"] = { vim.lsp.buf.code_action, "Code action" },
+    }, { prefix = "<leader>", mode = "v", buffer = ev.buf })
   end
 })
 
 return {
-  "williamboman/mason.nvim",
-  dependencies = {
+  "williamboman/mason.nvim", 
+  dependencies = { 
     'williamboman/mason-lspconfig.nvim',
     'neovim/nvim-lspconfig',
     'Hoffs/omnisharp-extended-lsp.nvim',

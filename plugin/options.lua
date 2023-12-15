@@ -23,7 +23,9 @@ vim.opt.laststatus = 3
 -- Folds
 vim.opt.foldmethod = "syntax"
 vim.opt.foldlevel = 3
-vim.opt.shell = "/usr/bin/bash"
+if vim.fn.has("linux") then
+  -- vim.opt.shell = "/usr/bin/bash"
+end
 -- set verbose=1
 vim.opt.scrolloff = 10
 

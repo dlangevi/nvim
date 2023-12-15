@@ -15,12 +15,20 @@ return {
       dapui.setup()
       neotest.setup({
         adapters = {
-          require("neotest-dotnet")
+          require("neotest-dotnet")({
+            -- dotnet_additional_args = {
+            --   "--verbosity detailed"
+            -- },
+            custom_attributes = {
+              xunit = { "WindowsOnlyTest" },
+            },
+          })
         },
         output = {
           open_on_run = false
         }
       })
+
       local function getInstallPath(package)
         local registry = require("mason-registry")
         return registry.get_package(package):get_install_path()
@@ -28,7 +36,7 @@ return {
 
       dap.adapters.netcoredbg = {
         type = 'executable',
-        command = getInstallPath("netcoredbg") .. "/netcoredbg",
+        command = getInstallPath("netcoredbg") .. "/netcoredbg/netcoredbg.exe",
         args = { '--interpreter=vscode' }
       }
 
@@ -53,8 +61,8 @@ return {
       wk.register({
         da = {
           name = "DAP UI",
-          o = { dapui.open , "Open dap ui" },
-          c = { dapui.close , "Close dap ui" },
+          o = { dapui.open, "Open dap ui" },
+          c = { dapui.close, "Close dap ui" },
           t = { dapui.toggle, "Toggle dap ui" },
         }
       }, { prefix = "<leader>" })
