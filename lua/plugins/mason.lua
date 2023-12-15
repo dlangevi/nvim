@@ -14,7 +14,6 @@ local function updateDiagnostics()
       severity = severity
     }
   })
-  vim.print(severity)
 end
 updateDiagnostics()
 
@@ -126,15 +125,24 @@ return {
       local registry = require("mason-registry")
       return registry.get_package(package):get_install_path()
     end
+
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities.textDocument.foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true
+    }
     require("mason-lspconfig").setup({
       handlers = {
         -- handles jsonls rust_analyzer gopls
         function(server_name) -- default handler
-          lspconfig[server_name].setup {}
+          lspconfig[server_name].setup {
+            capabilities = capabilities,
+          }
         end,
 
         lua_ls = function()
           lspconfig.lua_ls.setup {
+            capabilities = capabilities,
             settings = {
               Lua = {
                 runtime = { version = 'LuaJIT', },
@@ -190,6 +198,7 @@ return {
 
         omnisharp = function()
           lspconfig.omnisharp.setup {
+            capabilities = capabilities,
             handlers = {
               ["textDocument/definition"] = require('omnisharp_extended').handler,
             },
