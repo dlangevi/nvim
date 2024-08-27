@@ -123,6 +123,11 @@ return {
   },
   config = function()
     local lspconfig = require("lspconfig")
+    -- lspconfig.setup({
+    --   opts = {
+    --     autoformat = false,
+    --   },
+    -- })
     require("mason").setup()
     local function getInstallPath(package)
       local registry = require("mason-registry")
@@ -202,6 +207,9 @@ return {
         omnisharp = function()
           lspconfig.omnisharp.setup {
             capabilities = capabilities,
+            opts = {
+              -- autoformat = false,
+            },
             handlers = {
               ["textDocument/definition"] = require('omnisharp_extended').handler,
             },
@@ -215,7 +223,7 @@ return {
             -- doesn't seem to work?
             enable_import_completion = true,
             sdk_include_prereleases = true,
-            analyze_open_documents_only = false,
+            analyze_open_documents_only = true,
           }
         end
       }

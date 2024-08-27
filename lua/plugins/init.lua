@@ -40,6 +40,13 @@ return {
   { 'nvim-lua/plenary.nvim',    lazy = true },
 
   {
+    'fei6409/log-highlight.nvim',
+    config = function()
+        require('log-highlight').setup {}
+    end,
+  },
+
+  {
     'EtiamNullam/deferred-clipboard.nvim',
     opts = {
       lazy = true,

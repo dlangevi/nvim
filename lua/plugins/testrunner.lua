@@ -5,6 +5,7 @@ return {
     "nvim-neotest/neotest",
     dependencies = {
       "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio",
       "Issafalcon/neotest-dotnet",
       "rcarriga/nvim-dap-ui"
     },
@@ -36,7 +37,7 @@ return {
 
       dap.adapters.netcoredbg = {
         type = 'executable',
-        command = getInstallPath("netcoredbg") .. "/netcoredbg/netcoredbg.exe",
+        command = getInstallPath("netcoredbg") .. "/netcoredbg",
         args = { '--interpreter=vscode' }
       }
 
