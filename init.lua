@@ -31,4 +31,9 @@ require('lazy').setup('plugins', {
     enabled = true,
     notify = false,
   },
+  performance = {
+    cache = {
+      enabled = true 
+    }
+  }
 })

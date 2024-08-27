@@ -88,7 +88,7 @@ return {
     config = function()
       local coverage = require("coverage")
       coverage.setup({
-        lcov_file = 'coveragereport/lcov.info'
+        lcov_file = './coveragereport/lcov.info'
       })
 
       wk.register({
