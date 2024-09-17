@@ -76,40 +76,41 @@ vim.api.nvim_create_autocmd('LspAttach', {
       -- volar's format doesnt respect eslint rules
       -- until I find a way to do that, this ugly hack
       -- will work
-      if client.name == "volar" then
+      if client ~= nil and client.name == "volar" then
         vim.cmd "EslintFixAll"
       else
         vim.lsp.buf.format({ async = true })
       end
     end
 
-    wk.register({
-      g = {
-        name = "Go to",
-        D = { vim.lsp.buf.declaration, "Declaration" },
-        d = { vim.lsp.buf.definition, "Definition" },
-        i = { vim.lsp.buf.implementation, "Implementation" },
-        r = { vim.lsp.buf.references, "References" }
-      },
-      K = { vim.lsp.buf.hover, "lsp Hover" },
-    }, { buffer = ev.buf })
+    wk.add({
+      {
+        buffer = ev.buf,
+        { "K",             vim.lsp.buf.hover,           desc = "lsp Hover" },
 
-    wk.register({
-      ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
-    }, { mode = "i", buffer = ev.buf })
+        { "g",             group = "Go to" },
+        { "gD",            vim.lsp.buf.declaration,     desc = "Declaration" },
+        { "gT",            vim.lsp.buf.type_definition, desc = "Show type definitions" },
+        { "gd",            vim.lsp.buf.definition,      desc = "Definition" },
+        { "gi",            vim.lsp.buf.implementation,  desc = "Implementation" },
+        { "gr",            vim.lsp.buf.references,      desc = "References" },
 
-    -- Might want to put these all in a l = { 'lsp' } level?
-    wk.register({
-      r = { vim.lsp.buf.rename, "Rename variable" },
-      D = { vim.lsp.buf.type_definition, "Show type definitions" },
-      ["ca"] = { vim.lsp.buf.code_action, "Code action" },
-      ["<c-k>"] = { vim.lsp.buf.signature_help, "lsp Signature help" },
-      f = { formatBuffer, "Format buffer" },
-    }, { prefix = "<leader>", buffer = ev.buf })
+        { "<leader>r",     vim.lsp.buf.rename,          desc = "Rename variable" },
+        { "<leader><c-k>", vim.lsp.buf.signature_help,  desc = "lsp Signature help" },
+        { "<leader>f",     formatBuffer,                desc = "Format buffer" },
 
-    wk.register({
-      ["ca"] = { vim.lsp.buf.code_action, "Code action" },
-    }, { prefix = "<leader>", mode = "v", buffer = ev.buf })
+        {
+          mode = "i",
+          { "c-k", vim.lsp.buf.signature_help, desc = "lsp Signature help" },
+        },
+
+        {
+          mode = { "n", "v" },
+          { "<leader>ca", vim.lsp.buf.code_action, desc = "Code action" },
+        }
+      }
+    })
+
   end
 })
 
