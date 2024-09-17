@@ -52,35 +52,23 @@ return {
         },
       }
 
-      wk.register({
-        b = {
-          name = "breakpoints",
-          t = { dap.toggle_breakpoint, "Toggle breakpoint" },
-        }
-      }, { prefix = "<leader>" })
+      wk.add({
+        { "<leader>b",   group = "breakpoints" },
+        { "<leader>bt",  dap.toggle_breakpoint,                                desc = "Toggle breakpoint" },
 
-      wk.register({
-        da = {
-          name = "DAP UI",
-          o = { dapui.open, "Open dap ui" },
-          c = { dapui.close, "Close dap ui" },
-          t = { dapui.toggle, "Toggle dap ui" },
-        }
-      }, { prefix = "<leader>" })
+        { "<leader>da",  group = "DAP UI" },
+        { "<leader>dac", dapui.close,                                          desc = "Close dap ui" },
+        { "<leader>dao", dapui.open,                                           desc = "Open dap ui" },
+        { "<leader>dat", dapui.toggle,                                         desc = "Toggle dap ui" },
 
-      wk.register({
-        t = {
-          name = "tests",
-          r = { neotest.run.run, "Run Test" },
-          e = { function()
-            neotest.run.run({ strategy = "dap" })
-          end, "Run Test with DAP" },
-          d = { neotest.output_panel.toggle, "Toggle Ouput Panel" },
-          c = { neotest.output_panel.clear, "Clear Output Panel" },
-          f = { neotest.output.open, "Display Float" },
-          s = { neotest.summary.toggle, "Toggle Summary" },
-        }
-      }, { prefix = "<leader>" })
+        { "<leader>t",   group = "tests" },
+        { "<leader>tc",  neotest.output_panel.clear,                           desc = "Clear Output Panel" },
+        { "<leader>td",  neotest.output_panel.toggle,                          desc = "Toggle Ouput Panel" },
+        { "<leader>tf",  neotest.output.open,                                  desc = "Display Float" },
+        { "<leader>tr",  neotest.run.run,                                      desc = "Run Test" },
+        { "<leader>ts",  neotest.summary.toggle,                               desc = "Toggle Summary" },
+        { "<leader>te",  function() neotest.run.run({ strategy = "dap" }) end, desc = "Run Test with DAP" },
+      })
     end
   },
   {
@@ -91,15 +79,13 @@ return {
         lcov_file = './coveragereport/lcov.info'
       })
 
-      wk.register({
-        c = {
-          name = "coverage",
-          l = { coverage.load_lcov, "Load lcov file" },
-          t = { coverage.toggle, "Toggle coverage" },
-          s = { coverage.show, "Show coverage" },
-          h = { coverage.hide, "Hide coverage" },
-        }
-      }, { prefix = "<leader>" })
+      wk.add({
+        { "<leader>c",  group = "coverage" },
+        { "<leader>ch", coverage.load_lcov, desc = "Hide coverage" },
+        { "<leader>cl", coverage.hide,      desc = "Load lcov file" },
+        { "<leader>cs", coverage.show,      desc = "Show coverage" },
+        { "<leader>ct", coverage.toggle,    desc = "Toggle coverage" },
+      })
     end,
   },
 }

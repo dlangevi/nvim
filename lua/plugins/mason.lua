@@ -53,18 +53,17 @@ end
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local wk = require('which-key')
-wk.register({
-  d = {
-    name = "diagnostics",
-    f = { vim.diagnostic.open_float, "Open floating diagnostics" },
-    q = { vim.diagnostic.setloclist, "Open fixlist diagnostics" },
-    p = { goto_prev, "Go to previous diagnostic" },
-    n = { goto_next, "Go to next diagnostic" },
-    t = { toggleSuggestions, "Toggle Suggestions" },
-    d = { disableSuggestions, "Disable Suggestions" },
-    e = { enableSuggestions, "Enable Suggestions" }
-  }
-}, { prefix = "<leader>" })
+wk.add({
+
+  { "<leader>d",  group = "diagnostics" },
+  { "<leader>dd", disableSuggestions,        desc = "Disable Suggestions" },
+  { "<leader>de", enableSuggestions,         desc = "Enable Suggestions" },
+  { "<leader>df", vim.diagnostic.open_float, desc = "Open floating diagnostics" },
+  { "<leader>dn", goto_next,                 desc = "Go to next diagnostic" },
+  { "<leader>dp", goto_prev,                 desc = "Go to previous diagnostic" },
+  { "<leader>dq", vim.diagnostic.setloclist, desc = "Open fixlist diagnostics" },
+  { "<leader>dt", toggleSuggestions,         desc = "Toggle Suggestions" },
+})
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -115,8 +114,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 return {
-  "williamboman/mason.nvim", 
-  dependencies = { 
+  "williamboman/mason.nvim",
+  dependencies = {
     'williamboman/mason-lspconfig.nvim',
     'neovim/nvim-lspconfig',
     'Hoffs/omnisharp-extended-lsp.nvim',
@@ -136,8 +135,8 @@ return {
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities.textDocument.foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true
+      dynamicRegistration = false,
+      lineFoldingOnly = true
     }
     require("mason-lspconfig").setup({
       handlers = {

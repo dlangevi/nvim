@@ -3,23 +3,23 @@ return {
     "folke/which-key.nvim",
     lazy = true,
     init = function()
-      local which = require('which-key');
-      -- Keybindings
-      which.register({
+      local wk = require('which-key');
+      -- Keybindings unrelated to any other plugin
+      wk.add({
         -- Preview all key bindings
-        ['<leader>?'] = { which.show, "Preview all bindings" },
+        { "<leader>?",         wk.show,             desc = "Preview all bindings" },
+
         -- Old habit I have picked up from a previous leader key. switches to
         -- whatever buffer was previously in the current pane
-        ['--'] = { ':edit<Space>#<cr>', "Edit previous file" },
+        { "--",                ":edit<Space>#<cr>", desc = "Edit previous file" },
 
         -- Some way of doing this automatically would be nice when in nvim lua files
         -- maybe some comment at the top of a file would indicate its safe to reload
-        ['<leader><leader>s'] = { '<cmd>source %<cr>', "Source current file" },
+        { "<leader><leader>s", "<cmd>source %<cr>", desc = "Source current file" },
 
         -- Easy quit (todo need an alterante macro binding
         -- Maybe want to make this <leader>q ?
-        q = { ':q<CR>', "Quit" },
-
+        { "q",                 ":q<CR>",            desc = "Quit" },
       })
     end
   },
@@ -42,7 +42,7 @@ return {
   {
     'fei6409/log-highlight.nvim',
     config = function()
-        require('log-highlight').setup {}
+      require('log-highlight').setup {}
     end,
   },
 
@@ -103,16 +103,16 @@ return {
       local navigator = require('smart-splits');
       local which = require('which-key');
       -- Keybindings
-      which.register({
+      which.add({
         -- Tmux Navigator
-        ["<c-h>"] = { navigator.move_cursor_left, 'Navigate Left' },
-        ["<c-l>"] = { navigator.move_cursor_right, 'Navigate Right' },
-        ["<c-k>"] = { navigator.move_cursor_up, 'Navigate Up' },
-        ["<c-j>"] = { navigator.move_cursor_down, 'Navigate Down' },
-        ["<c-a-h>"] = { navigator.resize_left, 'Resize Left' },
-        ["<c-a-l>"] = { navigator.resize_right, 'Resize Right' },
-        ["<c-a-k>"] = { navigator.resize_up, 'Resize Up' },
-        ["<c-a-j>"] = { navigator.resize_down, 'Resize Down' },
+        { "<c-h>",   navigator.move_cursor_left,  desc = 'Navigate Left' },
+        { "<c-l>",   navigator.move_cursor_right, desc = 'Navigate Right' },
+        { "<c-k>",   navigator.move_cursor_up,    desc = 'Navigate Up' },
+        { "<c-j>",   navigator.move_cursor_down,  desc = 'Navigate Down' },
+        { "<c-a-h>", navigator.resize_left,       desc = 'Resize Left' },
+        { "<c-a-l>", navigator.resize_right,      desc = 'Resize Right' },
+        { "<c-a-k>", navigator.resize_up,         desc = 'Resize Up' },
+        { "<c-a-j>", navigator.resize_down,       desc = 'Resize Down' },
       })
     end
 

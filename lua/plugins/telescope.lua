@@ -58,21 +58,23 @@ return {
 
     local builtin = require('telescope.builtin')
 
-    require('which-key').register({
-      s = {
-        name = "telescope",
-        f = { function()
+    require('which-key').add({
+      { "<leader>s",  group = "telescope" },
+      { "<leader>sb", builtin.buffers,     desc = "Find Buffer" },
+      { "<leader>sg", builtin.live_grep,   desc = "Grep Project" },
+      { "<leader>sh", builtin.help_tags,   desc = "Search help tags" },
+      { "<leader>sp", builtin.git_files,   desc = "Find git Files" },
+      { "<leader>sr", builtin.resume,      desc = "Resume last Search" },
+      { "<leader>sw", builtin.grep_string, desc = "Search for word" },
+      {
+        "<leader>sf",
+        function()
           builtin.find_files({
             hidden = true,
           })
-        end, "Find File" },
-        p = { builtin.git_files, "Find git Files" },
-        b = { builtin.buffers, "Find Buffer" },
-        g = { builtin.live_grep, "Grep Project" },
-        r = { builtin.resume, "Resume last Search" },
-        h = { builtin.help_tags, "Search help tags" },
-        w = { builtin.grep_string, "Search for word" },
+        end,
+        desc = "Find File"
       },
-    }, { prefix = "<leader>" })
+    })
   end,
 }

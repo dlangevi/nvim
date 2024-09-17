@@ -20,7 +20,7 @@ local attach_to_buffer = function(bufnr, command, pattern)
   })
 end
 
-vim.api.nvim_create_user_command("AttachRunner", function ()
+vim.api.nvim_create_user_command("AttachRunner", function()
   local winAfter = vim.api.nvim_get_current_win()
   vim.cmd('vsplit')
   local win = vim.api.nvim_get_current_win()
@@ -31,4 +31,3 @@ vim.api.nvim_create_user_command("AttachRunner", function ()
   vim.api.nvim_set_current_win(win);
   attach_to_buffer(bufnr, { "deno", "run", "--allow-net", "test.ts" }, "*.ts");
 end, {})
-

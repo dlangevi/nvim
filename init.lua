@@ -16,16 +16,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.opt.termguicolors = true
 
--- Hacky way to set a namespace for commands
-vim.mapname = function(prefix, name)
-  local wk = require "which-key"
-  wk.register({
-    [prefix] = {
-      name = name,
-    }
-  })
-end
-
 require('lazy').setup('plugins', {
   change_detection = {
     enabled = true,
@@ -33,7 +23,7 @@ require('lazy').setup('plugins', {
   },
   performance = {
     cache = {
-      enabled = true 
+      enabled = true
     }
   }
 })

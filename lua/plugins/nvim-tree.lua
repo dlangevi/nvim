@@ -22,20 +22,20 @@ return
   },
   init = function()
     local api = require('nvim-tree.api')
-    require('which-key').register({
-      n = {
-        name = "nvim-tree",
-        d = {
-          api.tree.toggle, "Toggle NvimTree"
-        },
-        r = {
+    local wk = require('which-key')
+    wk.add(
+      {
+        { "<leader>n",  group = "nvim-tree" },
+        { "<leader>nd", api.tree.toggle,    desc = "Toggle NvimTree" },
+        {
+          "<leader>nr",
           function()
             local cwd = vim.loop.cwd();
             print(cwd)
             api.tree.change_root(cwd);
-          end, "Restore root"
-        }
-      }
-    }, { prefix = "<leader>" })
+          end,
+          desc = "Restore root"
+        },
+      })
   end,
 }
