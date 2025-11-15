@@ -30,27 +30,27 @@ return {
         }
       })
 
-      local function getInstallPath(package)
-        local registry = require("mason-registry")
-        return registry.get_package(package):get_install_path()
-      end
+      -- local function getInstallPath(package)
+      --   local registry = require("mason-registry")
+      --   return registry.get_package(package):get_install_path()
+      -- end
+      --
+      -- dap.adapters.netcoredbg = {
+      --   type = 'executable',
+      --   command = getInstallPath("netcoredbg") .. "/netcoredbg",
+      --   args = { '--interpreter=vscode' }
+      -- }
 
-      dap.adapters.netcoredbg = {
-        type = 'executable',
-        command = getInstallPath("netcoredbg") .. "/netcoredbg",
-        args = { '--interpreter=vscode' }
-      }
-
-      dap.configurations.cs = {
-        {
-          type = "coreclr",
-          name = "launch - netcoredbg",
-          request = "launch",
-          program = function()
-            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-          end,
-        },
-      }
+      -- dap.configurations.cs = {
+      --   {
+      --     type = "coreclr",
+      --     name = "launch - netcoredbg",
+      --     request = "launch",
+      --     program = function()
+      --       return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+      --     end,
+      --   },
+      -- }
 
       wk.add({
         { "<leader>b",   group = "breakpoints" },

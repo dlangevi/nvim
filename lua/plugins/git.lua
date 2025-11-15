@@ -17,6 +17,7 @@ wk.add({
 return {
   'tpope/vim-fugitive',
   'tommcdo/vim-fugitive-blame-ext',
+  'github/copilot.vim',
   {
     'linrongbin16/gitlinker.nvim',
     requires = 'nvim-lua/plenary.nvim',

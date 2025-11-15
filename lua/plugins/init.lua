@@ -117,5 +117,10 @@ return {
     end
 
   },
-
+  {
+    'neovim/nvim-lspconfig',
+    init = function()
+      require('lsp.init').setup()
+    end,
+  },
 }
