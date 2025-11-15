@@ -10,11 +10,12 @@ function M.get_capabilities()
 end
 
 function M.setup_servers()
-  local lspconfig = require("lspconfig")
+  local lspconfig = vim.lsp.config
   local capabilities = M.get_capabilities()
 
   -- Lua
-  lspconfig.lua_ls.setup {
+  vim.lsp.enable('luals')
+  vim.lsp.config.luals = {
     capabilities = capabilities,
     settings = {
       Lua = {
@@ -31,34 +32,34 @@ function M.setup_servers()
   }
 
   -- Volar (Vue/TypeScript)
-  lspconfig.volar.setup {
-    capabilities = capabilities,
-    filetypes = {
-      'typescript',
-      'javascript',
-      'javascriptreact',
-      'typescriptreact',
-      'vue',
-      'html',
-      'json'
-    },
-  }
-
-  -- ESLint
-  lspconfig.eslint.setup {
-    capabilities = capabilities,
-    filetypes = {
-      'typescript',
-      'javascript',
-      'vue',
-    },
-    on_attach = function(_, bufnr)
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = bufnr,
-        command = "EslintFixAll",
-      })
-    end,
-  }
+  -- lspconfig.volar.setup {
+  --   capabilities = capabilities,
+  --   filetypes = {
+  --     'typescript',
+  --     'javascript',
+  --     'javascriptreact',
+  --     'typescriptreact',
+  --     'vue',
+  --     'html',
+  --     'json'
+  --   },
+  -- }
+  --
+  -- -- ESLint
+  -- lspconfig.eslint.setup {
+  --   capabilities = capabilities,
+  --   filetypes = {
+  --     'typescript',
+  --     'javascript',
+  --     'vue',
+  --   },
+  --   on_attach = function(_, bufnr)
+  --     vim.api.nvim_create_autocmd("BufWritePre", {
+  --       buffer = bufnr,
+  --       command = "EslintFixAll",
+  --     })
+  --   end,
+  -- }
 
   -- OmniSharp (C#)
   -- lspconfig.omnisharp.setup {
@@ -81,7 +82,8 @@ function M.setup_servers()
   -- These will work automatically if installed via NixOS
   local simple_servers = { 'jsonls', 'rust_analyzer', 'gopls', 'ts_ls', 'clangd' }
   for _, server in ipairs(simple_servers) do
-    lspconfig[server].setup {
+    vim.lsp.enable(server)
+    vim.lsp.config[server] = {
       capabilities = capabilities,
     }
   end
