@@ -92,7 +92,6 @@ return {
   },
 
   -- added editing functionality
-  { 'numToStr/Comment.nvim',    config = true },
   { "kylechui/nvim-surround",   config = true },
   { 'ethanholz/nvim-lastplace', config = true },
 

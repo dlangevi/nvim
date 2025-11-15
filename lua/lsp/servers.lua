@@ -79,7 +79,7 @@ function M.setup_servers()
 
   -- Add other simple servers (jsonls, rust_analyzer, gopls, etc.)
   -- These will work automatically if installed via NixOS
-  local simple_servers = { 'jsonls', 'rust_analyzer', 'gopls', 'ts_ls' }
+  local simple_servers = { 'jsonls', 'rust_analyzer', 'gopls', 'ts_ls', 'clangd' }
   for _, server in ipairs(simple_servers) do
     lspconfig[server].setup {
       capabilities = capabilities,
