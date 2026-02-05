@@ -29,6 +29,16 @@ end
 -- set verbose=1
 vim.opt.scrolloff = 10
 
+-- Auto-reload files when changed externally (e.g., by AI CLIs)
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+  callback = function()
+    if vim.fn.getcmdwintype() == '' then
+      vim.cmd('checktime')
+    end
+  end,
+})
+
 vim.opt.foldcolumn = '1' -- '0' is not bad
 vim.opt.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
 vim.opt.foldlevelstart = 99
