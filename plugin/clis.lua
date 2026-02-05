@@ -76,7 +76,7 @@ local function open_cli_buffer(name, cmd, use_current_pane)
   -- Terminal-local keymaps for navigation and escaping
   local opts = { buffer = buf, silent = true }
   -- Allow <Esc> to enter normal mode
-  vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], opts)
+  -- vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], opts)
   -- Respect your window navigation keybinds while in terminal mode
   vim.keymap.set('t', '<C-h>', [[<C-\><C-n><C-w>h]], opts)
   vim.keymap.set('t', '<C-j>', [[<C-\><C-n><C-w>j]], opts)

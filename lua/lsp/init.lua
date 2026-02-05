@@ -1,9 +1,3 @@
--- TODO: Keep mason for non-NixOS systems
--- Create a separate mason.lua file that you only load conditionally:
--- if vim.fn.has('nixos') == 0 then
---   require('plugins.mason')
--- end
-
 local M = {}
 
 function M.setup()
@@ -24,7 +18,11 @@ function M.setup()
   })
 
   -- Setup all LSP servers
-  servers.setup_servers()
+  -- Only if on NixOS (otherwise Mason handles it)
+  local is_nixos = vim.fn.executable('nixos-rebuild') == 1 or vim.loop.fs_stat('/etc/nixos')
+  if is_nixos then
+    servers.setup_servers()
+  end
 end
 
 return M
