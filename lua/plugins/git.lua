@@ -24,13 +24,13 @@ return {
       })
 
       wk.add({
-        { "<leader>l", group = "gitlinker" },
+        { "<leader>g", group = "gitlinker" },
         {
           mode = { "n", "v" },
-          { "<leader>ll", require("gitlinker").link, desc = "GitLink" },
+          { "<leader>gl", require("gitlinker").link, desc = "GitLink" },
 
           {
-            "<leader>lL",
+            "<leader>gL",
             function()
               require("gitlinker").link({ action = require("gitlinker.actions").system })
             end,
@@ -38,7 +38,7 @@ return {
           },
 
           {
-            "<leader>lb",
+            "<leader>gb",
             function()
               require("gitlinker").link({ router_type = "blame" })
             end,
@@ -46,7 +46,7 @@ return {
           },
 
           {
-            "<leader>lB",
+            "<leader>gB",
             function()
               require("gitlinker").link({
                 router_type = "blame",
@@ -57,7 +57,7 @@ return {
           },
 
           {
-            "<leader>ld",
+            "<leader>gd",
             function()
               require("gitlinker").link({ router_type = "default_branch" })
             end,
@@ -65,7 +65,7 @@ return {
           },
 
           {
-            "<leader>lD",
+            "<leader>gD",
             function()
               require("gitlinker").link({
                 router_type = "default_branch",
@@ -76,7 +76,7 @@ return {
           },
 
           {
-            "<leader>lc",
+            "<leader>gc",
             function()
               require("gitlinker").link({ router_type = "current_branch" })
             end,
@@ -84,7 +84,7 @@ return {
           },
 
           {
-            "<leader>lC",
+            "<leader>gC",
             function()
               require("gitlinker").link({
                 router_type = "current_branch",

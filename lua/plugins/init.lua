@@ -11,8 +11,8 @@ return {
 
         -- AI CLIs
         { "<leader>c",         group = "AI" },
-        { "<leader>cg",        "<cmd>Gemini<cr>",   desc = "Gemini CLI" },
-        { "<leader>cc",        "<cmd>Copilot<cr>",  desc = "Copilot CLI" },
+        { "<leader>cg",        "<cmd>GeminiHere<cr>",   desc = "Gemini CLI" },
+        { "<leader>cc",        "<cmd>CopilotHere<cr>",  desc = "Copilot CLI" },
 
         -- Old habit I have picked up from a previous leader key. switches to
         -- whatever buffer was previously in the current pane
@@ -21,12 +21,21 @@ return {
         -- Some way of doing this automatically would be nice when in nvim lua files
         -- maybe some comment at the top of a file would indicate its safe to reload
         { "<leader><leader>s", "<cmd>source %<cr>", desc = "Source current file" },
+        { "<leader><leader>r", "<cmd>source $MYVIMRC<cr>", desc = "Reload nvim config" },
 
         -- Easy quit (todo need an alterante macro binding
         -- Maybe want to make this <leader>q ?
         { "q",                 ":q<CR>",            desc = "Quit" },
 
         { "<C-q>",             "q",                 desc = "Start/Stop Macro Recording" },
+
+        -- Insert mode: jk and kj to escape to normal mode
+        { "jk",                "<Esc>",             desc = "Exit insert mode", mode = "i" },
+        { "kj",                "<Esc>",             desc = "Exit insert mode", mode = "i" },
+
+        -- Terminal mode: jk and kj to escape to normal mode
+        { "jk",                [[<C-\><C-n>]],      desc = "Exit terminal mode", mode = "t" },
+        { "kj",                [[<C-\><C-n>]],      desc = "Exit terminal mode", mode = "t" },
       })
     end
   },
