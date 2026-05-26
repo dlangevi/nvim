@@ -160,6 +160,7 @@ return {
   {
     'Vigemus/iron.nvim',
     config = function()
+      local platform = require('platform')
       local iron = require('iron.core');
       iron.setup {
         config = {
@@ -170,7 +171,7 @@ return {
             sh = {
               -- Can be a table or a function that
               -- returns a table (see below)
-              command = { "zsh" }
+              command = { platform.is_windows and "powershell" or "zsh" }
             },
             python = {
               command = { "python3" }, -- or { "ipython", "--no-autoindent" }
