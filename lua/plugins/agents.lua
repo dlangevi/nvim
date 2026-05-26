@@ -30,7 +30,7 @@ return {
       },
       {
         "<leader>as",
-        function() require("sidekick.cli").select({ filter = { names = { "gemini", "copilot" } } }) end,
+        function() require("sidekick.cli").select({ filter = { names = { "claude", "gemini", "copilot" } } }) end,
         desc = "Select CLI",
       },
       {
@@ -63,15 +63,8 @@ return {
       },
       {
         "<leader>ac",
-        function()
-          local Session = require("sidekick.cli.session")
-          Session.setup() -- ensure backends (terminal, tmux, etc.) are registered
-          local State = require("sidekick.cli.state")
-          local Config = require("sidekick.config")
-          local tool = Config.get_tool("copilot")
-          State.attach({ tool = tool, installed = true }, { show = true, focus = true })
-        end,
-        desc = "Sidekick New Copilot",
+        function() require("sidekick.cli").toggle({ name = "claude", focus = true }) end,
+        desc = "Sidekick Toggle Claude",
       },
       {
         "<leader>ag",
