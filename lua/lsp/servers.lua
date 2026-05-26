@@ -55,13 +55,12 @@ function M.setup_servers()
 
   -- OmniSharp (C#)
   vim.lsp.enable('omnisharp')
+  local ok, omnisharp_extended = pcall(require, 'omnisharp_extended')
   vim.lsp.config('omnisharp', {
     capabilities = capabilities,
-    handlers = {
-      ["textDocument/definition"] = require('omnisharp_extended').handler,
-    },
-    -- On NixOS, omnisharp will be in PATH, so just use the command directly
-    -- cmd = { "OmniSharp" },
+    handlers = ok and {
+      ["textDocument/definition"] = omnisharp_extended.handler,
+    } or nil,
     enable_editorconfig_support = true,
     enable_ms_build_load_projects_on_demand = false,
     enable_roslyn_analyzers = true,
