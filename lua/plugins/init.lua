@@ -1,3 +1,5 @@
+local platform = require('platform')
+
 local plugins = {
   { import = 'plugins.core' },
   { import = 'plugins.telescope' },
@@ -9,11 +11,7 @@ local plugins = {
   { import = 'plugins.agents' },
 }
 
--- Conditional loading of Mason for non-NixOS systems
--- Assuming NixOS has 'nixos-rebuild' in path, or specific file structure
-local is_nixos = vim.fn.executable('nixos-rebuild') == 1 or vim.loop.fs_stat('/etc/nixos')
-
-if not is_nixos then
+if not platform.is_nixos then
   table.insert(plugins, { import = 'plugins.mason' })
 end
 
