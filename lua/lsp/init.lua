@@ -17,12 +17,7 @@ function M.setup()
     end
   })
 
-  -- Setup all LSP servers
-  -- Only if on NixOS (otherwise Mason handles it)
-  local is_nixos = vim.fn.executable('nixos-rebuild') == 1 or vim.loop.fs_stat('/etc/nixos')
   servers.setup_servers()
-  if is_nixos then
-  end
 end
 
 return M
