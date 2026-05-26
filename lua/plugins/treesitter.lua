@@ -13,7 +13,8 @@ return {
       "javascript",
       "typescript",
       "vue",
-      "go"
+      "go",
+      "kusto"
     },
     highlight = {
       enable = true,

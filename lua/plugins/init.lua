@@ -6,6 +6,7 @@ local plugins = {
   { import = 'plugins.git' },
   { import = 'plugins.lualine' },
   { import = 'plugins.nvim-tree' },
+  { import = 'plugins.agents' },
 }
 
 -- Conditional loading of Mason for non-NixOS systems

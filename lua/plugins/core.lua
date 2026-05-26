@@ -7,40 +7,33 @@ return {
       -- Keybindings unrelated to any other plugin
       wk.add({
         -- Preview all key bindings
-        { "<leader>?",         wk.show,             desc = "Preview all bindings" },
-
-        -- AI CLIs
-        { "<leader>c",         group = "AI" },
-        { "<leader>cg",        "<cmd>GeminiHere<cr>",   desc = "Gemini CLI" },
-        { "<leader>cc",        "<cmd>CopilotHere<cr>",  desc = "Copilot CLI" },
+        { "<leader>?",         wk.show,                    desc = "Preview all bindings" },
 
         -- Old habit I have picked up from a previous leader key. switches to
         -- whatever buffer was previously in the current pane
-        { "--",                ":edit<Space>#<cr>", desc = "Edit previous file" },
+        { "--",                ":edit<Space>#<cr>",        desc = "Edit previous file" },
 
         -- Some way of doing this automatically would be nice when in nvim lua files
         -- maybe some comment at the top of a file would indicate its safe to reload
-        { "<leader><leader>s", "<cmd>source %<cr>", desc = "Source current file" },
+        { "<leader><leader>s", "<cmd>source %<cr>",        desc = "Source current file" },
         { "<leader><leader>r", "<cmd>source $MYVIMRC<cr>", desc = "Reload nvim config" },
 
         -- Easy quit (todo need an alterante macro binding
         -- Maybe want to make this <leader>q ?
-        { "q",                 ":q<CR>",            desc = "Quit" },
+        { "q",                 ":q<CR>",                   desc = "Quit" },
 
-        { "<C-q>",             "q",                 desc = "Start/Stop Macro Recording" },
+        { "<C-q>",             "q",                        desc = "Start/Stop Macro Recording" },
 
         -- Insert mode: jk and kj to escape to normal mode
-        { "jk",                "<Esc>",             desc = "Exit insert mode", mode = "i" },
-        { "kj",                "<Esc>",             desc = "Exit insert mode", mode = "i" },
+        { "jk",                "<Esc>",                    desc = "Exit insert mode",          mode = "i" },
+        { "kj",                "<Esc>",                    desc = "Exit insert mode",          mode = "i" },
 
         -- Terminal mode: jk and kj to escape to normal mode
-        { "jk",                [[<C-\><C-n>]],      desc = "Exit terminal mode", mode = "t" },
-        { "kj",                [[<C-\><C-n>]],      desc = "Exit terminal mode", mode = "t" },
+        { "jk",                [[<C-\><C-n>]],             desc = "Exit terminal mode",        mode = "t" },
+        { "kj",                [[<C-\><C-n>]],             desc = "Exit terminal mode",        mode = "t" },
       })
     end
   },
-
-  { "github/copilot.vim" },
 
   -- full signature help, docs and completion for the nvim lua API
   {
@@ -88,6 +81,19 @@ return {
     }
   },
   {
+    "nvim-zh/colorful-winsep.nvim",
+    event = { "WinLeave" },
+    opts = {
+      border = "bold",
+      animate = {
+        enabled = false,
+      },
+      indicator_for_2wins = {
+        position = "center",
+      },
+    },
+  },
+  {
     -- Our main colorscheme
     'sainnhe/sonokai',
     lazy = false,
@@ -133,6 +139,11 @@ return {
         { "<c-a-l>", navigator.resize_right,      desc = 'Resize Right' },
         { "<c-a-k>", navigator.resize_up,         desc = 'Resize Up' },
         { "<c-a-j>", navigator.resize_down,       desc = 'Resize Down' },
+        -- Respect your window navigation keybinds while in terminal mode
+        { "<c-h>",   [[<C-\><C-n><C-w>h]],        desc = "Navigate Left (terminal)",  mode = "t" },
+        { "<c-j>",   [[<C-\><C-n><C-w>j]],        desc = "Navigate Down (terminal)",  mode = "t" },
+        { "<c-k>",   [[<C-\><C-n><C-w>k]],        desc = "Navigate Up (terminal)",    mode = "t" },
+        { "<c-l>",   [[<C-\><C-n><C-w>l]],        desc = "Navigate Right (terminal)", mode = "t" },
       })
     end
 

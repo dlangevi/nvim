@@ -13,8 +13,7 @@ function M.setup_servers()
   local capabilities = M.get_capabilities()
 
   -- Lua
-  vim.lsp.enable('luals')
-  vim.lsp.config('luals', {
+  vim.lsp.config('lua_ls', {
     on_init = function(client)
       if client.workspace_folders then
         local path = client.workspace_folders[1].name
@@ -50,46 +49,19 @@ function M.setup_servers()
     settings = {
       Lua = {},
     },
-})
+  })
 
-  -- Volar (Vue/TypeScript)
-  -- lspconfig.volar.setup {
-  --   capabilities = capabilities,
-  --   filetypes = {
-  --     'typescript',
-  --     'javascript',
-  --     'javascriptreact',
-  --     'typescriptreact',
-  --     'vue',
-  --     'html',
-  --     'json'
-  --   },
-  -- }
-  --
-  -- -- ESLint
-  -- lspconfig.eslint.setup {
-  --   capabilities = capabilities,
-  --   filetypes = {
-  --     'typescript',
-  --     'javascript',
-  --     'vue',
-  --   },
-  --   on_attach = function(_, bufnr)
-  --     vim.api.nvim_create_autocmd("BufWritePre", {
-  --       buffer = bufnr,
-  --       command = "EslintFixAll",
-  --     })
-  --   end,
-  -- }
+  vim.lsp.enable('copilot')
 
   -- OmniSharp (C#)
+  vim.lsp.enable('omnisharp')
   vim.lsp.config('omnisharp', {
     capabilities = capabilities,
     handlers = {
       ["textDocument/definition"] = require('omnisharp_extended').handler,
     },
     -- On NixOS, omnisharp will be in PATH, so just use the command directly
-    cmd = { "OmniSharp" },
+    -- cmd = { "OmniSharp" },
     enable_editorconfig_support = true,
     enable_ms_build_load_projects_on_demand = false,
     enable_roslyn_analyzers = true,
@@ -101,7 +73,7 @@ function M.setup_servers()
 
   -- Add other simple servers (jsonls, rust_analyzer, gopls, etc.)
   -- These will work automatically if installed via NixOS
-  local simple_servers = { 'jsonls', 'rust_analyzer', 'gopls', 'ts_ls', 'clangd', 'omnisharp' }
+  local simple_servers = { 'jsonls', 'rust_analyzer', 'gopls', 'ts_ls', 'clangd', }
   for _, server in ipairs(simple_servers) do
     vim.lsp.enable(server)
     vim.lsp.config[server] = {
@@ -109,5 +81,29 @@ function M.setup_servers()
     }
   end
 end
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+
+    if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion, bufnr) then
+      vim.lsp.inline_completion.enable(true, { bufnr = bufnr })
+
+      vim.keymap.set(
+        'i',
+        '<C-y>',
+        vim.lsp.inline_completion.get,
+        { desc = 'LSP: accept inline completion', buffer = bufnr }
+      )
+      vim.keymap.set(
+        'i',
+        '<C-G>',
+        vim.lsp.inline_completion.select,
+        { desc = 'LSP: switch inline completion', buffer = bufnr }
+      )
+    end
+  end
+})
 
 return M

@@ -1,9 +1,35 @@
 local wk = require('which-key')
 
 return {
-  'tpope/vim-fugitive',
+  {
+    'tpope/vim-fugitive',
+    config = function()
+      vim.g.fugitive_browse_handlers = {
+        function(opts)
+          local remote = opts.remote or ''
+          if string.match(remote, 'github%.docusignhq%.com') then
+            local new_url = string.gsub(remote, 'git@github%.docusignhq%.com:', 'https://github.docusignhq.com/')
+            new_url = string.gsub(new_url, '%.git$', '')
+            -- Append path, line range, etc.
+            if opts.path then
+              new_url = new_url .. '/blob/' .. opts.commit .. '/' .. opts.path
+              if opts.line1 then
+                new_url = new_url .. '#L' .. opts.line1
+                if opts.line2 and opts.line2 ~= opts.line1 then
+                  new_url = new_url .. '-L' .. opts.line2
+                end
+              end
+            else
+              new_url = new_url .. '/commit/' .. opts.commit
+            end
+            
+            return new_url
+          end
+        end
+      }
+    end
+  },
   'tommcdo/vim-fugitive-blame-ext',
-  'github/copilot.vim',
   {
     'linrongbin16/gitlinker.nvim',
     lazy = false,
