@@ -7,7 +7,6 @@ return {
       "c",
       "css",
       "bash",
-      "c_sharp",
       "lua",
       "rust",
       "javascript",

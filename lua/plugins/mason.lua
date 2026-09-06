@@ -3,15 +3,10 @@ return {
   dependencies = {
     'williamboman/mason-lspconfig.nvim',
     'neovim/nvim-lspconfig',
-    'Hoffs/omnisharp-extended-lsp.nvim',
   },
   config = function()
     local lspconfig = require("lspconfig")
     require("mason").setup()
-    local function getInstallPath(package)
-      local registry = require("mason-registry")
-      return registry.get_package(package):get_install_path()
-    end
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities.textDocument.foldingRange = {
@@ -75,25 +70,6 @@ return {
             end,
           }
         end,
-
-        omnisharp = function()
-          local ok, omnisharp_extended = pcall(require, 'omnisharp_extended')
-          lspconfig.omnisharp.setup {
-            capabilities = capabilities,
-            handlers = ok and {
-              ["textDocument/definition"] = omnisharp_extended.handler,
-            } or nil,
-            cmd = { "dotnet", getInstallPath("omnisharp") .. "/libexec/OmniSharp.dll",
-              "--languageserver" },
-            enable_editorconfig_support = true,
-            enable_ms_build_load_projects_on_demand = false,
-            enable_roslyn_analyzers = true,
-            organize_imports_on_format = false,
-            enable_import_completion = true,
-            sdk_include_prereleases = true,
-            analyze_open_documents_only = true,
-          }
-        end
       }
     })
   end

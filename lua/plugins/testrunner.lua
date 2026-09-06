@@ -6,7 +6,6 @@ return {
     dependencies = {
       "mfussenegger/nvim-dap",
       "nvim-neotest/nvim-nio",
-      "Issafalcon/neotest-dotnet",
       "rcarriga/nvim-dap-ui"
     },
     config = function()
@@ -15,31 +14,11 @@ return {
       local dapui = require("dapui")
       dapui.setup()
       neotest.setup({
-        adapters = {
-          require("neotest-dotnet")({
-            -- dotnet_additional_args = {
-            --   "--verbosity detailed"
-            -- },
-            custom_attributes = {
-              xunit = { "WindowsOnlyTest" },
-            },
-          })
-        },
+        adapters = {},
         output = {
           open_on_run = false
         }
       })
-
-      dap.configurations.cs = {
-        {
-          type = "coreclr",
-          name = "launch - netcoredbg",
-          request = "launch",
-          program = function()
-            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
-          end,
-        },
-      }
 
       wk.add({
         { "<leader>b",   group = "breakpoints" },
